@@ -57,11 +57,11 @@ public class wordCount {
 	 while(!hm.isEmpty())
 	 {
 		 if(!hm.containsKey(stwords[c])) 
-			 hm.put(stwords[c],new Double(1.0));
+			 hm.put(stwords[c],1);
 			
 			else {
-				double val=(double) hm.get(stwords[c]);
-				hm.put(hm.get(stwords[c]),new Double(val++));
+			
+				hm.put(stwords[c], hm.get(stwords[c]) + 1);
 			}
 	 }
 	}
