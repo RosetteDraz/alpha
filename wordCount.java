@@ -4,13 +4,14 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.HashMap;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 
 public class wordCount {
 	public static void main(String[] args) throws IOException 
-	{
+	{ 
 		JButton open = new JButton();
 		JFileChooser fileChooser = new JFileChooser();
 		fileChooser.setCurrentDirectory(new java.io.File("C:/dialog"));
@@ -20,52 +21,53 @@ public class wordCount {
 			//
 		}
 		    
-		    System.out.println("Selected file: " + fileChooser.getSelectedFile().getAbsolutePath());
+		System.out.println("Selected file: " + fileChooser.getSelectedFile().getAbsolutePath());
 
-	File file= fileChooser.getSelectedFile();
-	FileReader fileReader=new FileReader(file);
-	BufferedReader br = new BufferedReader(fileReader);
-	StringBuffer stringBuffer = new StringBuffer();
-	String line;
-	while ((line = br.readLine())!= null)
-	{
-		stringBuffer.append(line);
-		stringBuffer.append("\n");
-	}
-	fileReader.close(); 
-	
-	//clean the text
-	for(int i=0; i< stringBuffer.length();i++)
-	{
-		if(stringBuffer.charAt(i)!=' ' &&
-				!((stringBuffer.charAt(i)>='A' && stringBuffer.charAt(i)<='Z')||
-				 (stringBuffer.charAt(i)>='a' && stringBuffer.charAt(i)<='z')))
+		File file= fileChooser.getSelectedFile();
+		FileReader fileReader=new FileReader(file);
+		BufferedReader br = new BufferedReader(fileReader);
+		StringBuffer stringBuffer = new StringBuffer();
+		String line;
+		while ((line = br.readLine())!= null)
 		{
-			stringBuffer.deleteCharAt(i);
-			i--;
-	    } 
-	}
-	
-	
-	HashMap hm = new HashMap();
-	
-	String everything=stringBuffer.toString();
-	String [] stwords=everything.split("\\s+");
-	for(int c =0; c<stwords.length;c++)
-	{
-	 System.out.println(stwords[c]);
-	 while(!hm.isEmpty())
-	 {
-		 if(!hm.containsKey(stwords[c])) 
-			 hm.put(stwords[c],1);
+			stringBuffer.append(" ");
+			stringBuffer.append(line);
 			
+		}
+		fileReader.close(); 
+	
+		//clean the text
+		for(int i=0; i< stringBuffer.length();i++)
+		{
+			if(stringBuffer.charAt(i)!=' ' &&
+					!((stringBuffer.charAt(i)>='A' && stringBuffer.charAt(i)<='Z')||
+					 (stringBuffer.charAt(i)>='a' && stringBuffer.charAt(i)<='z')))
+			{
+				stringBuffer.deleteCharAt(i);
+				i--;
+		    } 
+		}
+	
+		String everything=stringBuffer.toString();
+		String [] stwords=everything.split("\\s+");
+		// Arrays.asList(stwords);
+		
+		
+		HashMap<String, Integer> hm = new HashMap<String, Integer>();
+
+		for(int c =0; c<stwords.length;c++)
+		{
+			System.out.println(stwords[c]);
+			if(!hm.containsKey(stwords[c])) {
+				hm.put(stwords[c],1);
+			}
 			else {
-			
+				
 				hm.put(stwords[c], hm.get(stwords[c]) + 1);
 			}
-	 }
+		}
+		
 	}
-}
 }
 
 	
