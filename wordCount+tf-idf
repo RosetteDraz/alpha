@@ -27,6 +27,7 @@ public class wordCount {
 		if (files.length == 0) {
 		return;
 		}
+		List<List<String>> documents = Arrays.asList();
 		for (int i = 0; i < files.length; i++) {
 		File file = files[i];
 			FileReader fileReader=new FileReader(file);
@@ -40,20 +41,17 @@ public class wordCount {
 			
 		}
 		fileReader.close(); 
+		txtClean(stringBuffer);
+		String everything=stringBuffer.toString();
+		String [] stwords=everything.split("\\s+");
+		List<String> myList = Arrays.asList(stwords);
 		}
 		
 	
 	
 		//clean the text
-		txtClean(stringBuffer);
-		String everything=stringBuffer.toString();
-		String [] stwords=everything.split("\\s+");
-		List<String> myList = Arrays.asList(stwords);
+		
 		wordC(myList);
-		 
-		List<String> doc2 = Arrays.asList("Vituperata", "incorrupte", "at", "of", "of", "quo");
-		List<String> doc3 = Arrays.asList("of", "of", "of", "of", "to");
-		List<List<String>> documents = Arrays.asList(myList, doc2, doc3);
 		wordCount calculator = new  wordCount();
 
 		double tfidf = calculator.tfIdf(myList,documents, "of");
