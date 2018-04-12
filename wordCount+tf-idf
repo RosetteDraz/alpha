@@ -29,13 +29,12 @@ public class wordCount {
 		}
 		List<List<String>> documents = Arrays.asList();
 		for (int i = 0; i < files.length; i++) {
-		File file = files[i];
+			File file = files[i];
 			FileReader fileReader=new FileReader(file);
-		BufferedReader br = new BufferedReader(fileReader);
-		
-		String line;
-		while ((line = br.readLine())!= null)
-		{
+			BufferedReader br = new BufferedReader(fileReader);
+			String line;
+			while ((line = br.readLine())!= null)
+			{
 			stringBuffer.append(" ");
 			stringBuffer.append(line);
 			
