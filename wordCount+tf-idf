@@ -16,15 +16,22 @@ public class wordCount {
 	{ 
 		JButton open = new JButton();
 		JFileChooser fileChooser = new JFileChooser();
+		fileChooser.setMultiSelectionEnabled(true);
 		fileChooser.setCurrentDirectory(new java.io.File("C:/dialog"));
 		fileChooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
 		fileChooser.showOpenDialog(open);
 		System.out.println("Selected file: " + fileChooser.getSelectedFile().getAbsolutePath());
 		
-		File file= fileChooser.getSelectedFile();
-		FileReader fileReader=new FileReader(file);
-		BufferedReader br = new BufferedReader(fileReader);
+		File[] files = fileChooser.getSelectedFiles();
 		StringBuffer stringBuffer = new StringBuffer();
+		if (files.length == 0) {
+		return;
+		}
+		for (int i = 0; i < files.length; i++) {
+		File file = files[i];
+			FileReader fileReader=new FileReader(file);
+		BufferedReader br = new BufferedReader(fileReader);
+		
 		String line;
 		while ((line = br.readLine())!= null)
 		{
@@ -33,29 +40,19 @@ public class wordCount {
 			
 		}
 		fileReader.close(); 
+		}
+		
+	
 	
 		//clean the text
-		for(int i=0; i< stringBuffer.length();i++)
-		{
-			if(stringBuffer.charAt(i)!=' ' &&
-					!((stringBuffer.charAt(i)>='A' && stringBuffer.charAt(i)<='Z')||
-							(stringBuffer.charAt(i)>='a' && stringBuffer.charAt(i)<='z')))
-			{
-				stringBuffer.deleteCharAt(i);
-				i--;
-			} 
-		}
-	
+		txtClean(stringBuffer);
 		String everything=stringBuffer.toString();
 		String [] stwords=everything.split("\\s+");
 		List<String> myList = Arrays.asList(stwords);
 		wordC(myList);
 		 
-		 
 		List<String> doc2 = Arrays.asList("Vituperata", "incorrupte", "at", "of", "of", "quo");
-
 		List<String> doc3 = Arrays.asList("of", "of", "of", "of", "to");
-
 		List<List<String>> documents = Arrays.asList(myList, doc2, doc3);
 		wordCount calculator = new  wordCount();
 
@@ -82,6 +79,21 @@ public class wordCount {
 		System.out.println(hm);
 	}
 	
+	public static void txtClean(StringBuffer stringBuffer) {
+		
+		for(int i=0; i< stringBuffer.length();i++)
+		{
+			if(stringBuffer.charAt(i)!=' ' &&
+					!((stringBuffer.charAt(i)>='A' && stringBuffer.charAt(i)<='Z')||
+							(stringBuffer.charAt(i)>='a' && stringBuffer.charAt(i)<='z')))
+			{
+				stringBuffer.deleteCharAt(i);
+				i--;
+			} 
+		}
+
+	}
+
 	public double tf(List<String> doc, String term) {
 
 		double result = 0;
