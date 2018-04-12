@@ -35,8 +35,8 @@ public class wordCount {
 			String line;
 			while ((line = br.readLine())!= null)
 			{
-			stringBuffer.append(" ");
-			stringBuffer.append(line);	
+				stringBuffer.append(" ");
+				stringBuffer.append(line);	
 			}
 			fileReader.close(); 
 			txtClean(stringBuffer);
