@@ -36,18 +36,14 @@ public class wordCount {
 			while ((line = br.readLine())!= null)
 			{
 			stringBuffer.append(" ");
-			stringBuffer.append(line);
-			
+			stringBuffer.append(line);	
+			}
+			fileReader.close(); 
+			txtClean(stringBuffer);
+			String everything=stringBuffer.toString();
+			String [] stwords=everything.split("\\s+");
+			List<String> myList = Arrays.asList(stwords);
 		}
-		fileReader.close(); 
-		txtClean(stringBuffer);
-		String everything=stringBuffer.toString();
-		String [] stwords=everything.split("\\s+");
-		List<String> myList = Arrays.asList(stwords);
-		}
-		
-	
-	
 		//clean the text
 		
 		wordC(myList);
