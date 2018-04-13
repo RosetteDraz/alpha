@@ -42,16 +42,28 @@ public class wordCount {
 			txtClean(stringBuffer);
 			String everything=stringBuffer.toString();
 			String [] stwords=everything.split("\\s+");
+			
 			List<String> myList = Arrays.asList(stwords);
+		//	documents.addAll(myList);
+			wordC(myList);
+			
+			for(int c =0; c<myList.size();c++)
+			{
+				wordCount calculator = new  wordCount();
+				double tfidf = calculator.tfIdf(myList,documents, myList.get(c));
+				
+				
+				System.out.println("TF-IDF ("+ myList.get(c)+(")=") + tfidf);
+			}
 		}
-		//clean the text
 		
-		wordC(myList);
-		wordCount calculator = new  wordCount();
+		
+		
+		
 
-		double tfidf = calculator.tfIdf(myList,documents, "of");
+		
 
-		System.out.println("TF-IDF (of) = " + tfidf);
+		
 		
 	}
 	
@@ -65,7 +77,6 @@ public class wordCount {
 				hm.put(doc.get(c),1);
 			}
 			else {
-				
 				hm.put(doc.get(c), hm.get(doc.get(c)) + 1);
 			}
 		}
