@@ -1,0 +1,180 @@
+package koko;
+
+import java.io.BufferedReader;  
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+
+import javax.swing.JButton;
+import javax.swing.JFileChooser;
+
+public class wordCount {
+	public static void main(String[] args) throws IOException 
+	{ 
+		JButton open = new JButton();
+		JFileChooser fileChooser = new JFileChooser();
+		fileChooser.setMultiSelectionEnabled(true);
+		fileChooser.setCurrentDirectory(new java.io.File("C:/dialog"));
+		fileChooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+		fileChooser.showOpenDialog(open);
+		System.out.println("Selected file: " + fileChooser.getSelectedFile().getAbsolutePath());
+		
+		File[] files = fileChooser.getSelectedFiles();
+		if (files.length == 0) {
+		return;
+		}
+		List<List<String>> documents = new LinkedList<List<String>>();
+		HashMap<String, Integer> allWords = new HashMap<String, Integer>();
+		int wordCount = 0;
+		for (File file : files) {
+			FileReader fileReader=new FileReader(file);
+			BufferedReader br = new BufferedReader(fileReader);
+			String line;
+			StringBuffer stringBuffer = new StringBuffer();
+			while ((line = br.readLine())!= null)
+			{
+				stringBuffer.append(" ");
+				stringBuffer.append(line);	
+			}
+			fileReader.close(); 
+			txtClean(stringBuffer);
+			String everything=stringBuffer.toString();
+			everything=everything.toLowerCase();
+			String [] stwords=everything.split("\\s+");
+			
+			
+			for (int i=0;i<stwords.length;i++)
+			{
+				if(!allWords.containsKey(stwords[i])) {
+					allWords.put(stwords[i], wordCount++);
+				}
+			}
+			List<String> myList = Arrays.asList(stwords);
+			documents.add(myList);
+		}
+		
+		List<double[]> wc_list = new LinkedList<>();
+		List<double[]> tfidf_list= new LinkedList<>();
+		for(List<String> doc : documents)
+		{
+			double[] wc_array = new double[wordCount];
+			wc_list.add(wc_array);
+			HashMap<String, Integer> hm = wordC(doc);
+			
+			for(Map.Entry<String, Integer> m : hm.entrySet()) {
+				wc_array[allWords.get(m.getKey())] = m.getValue();
+			}
+			
+			double[] tfidf_array = new double[wordCount];
+			tfidf_list.add(tfidf_array);
+			for(String word: doc)
+			{
+				wordCount calculator = new  wordCount();
+				double tfidf = calculator.tfIdf(doc, documents, word);
+				tfidf_array[allWords.get(word)] = tfidf;
+				
+				System.out.println("TF-IDF ("+ word +(")=") + tfidf);
+			}
+		}
+		for (int i = 0; i < wc_list.size(); i++)
+		{
+			for(int c=0; c<wc_list.get(i).length; c++)
+			{
+				System.out.println(wc_list.get(i)[c]);
+			}
+		}
+		System.out.println("///////");
+		for (int i = 0; i < wc_list.size(); i++)
+		{
+			for(int c=0; c<wc_list.get(i).length; c++)
+			{
+				System.out.println(tfidf_list.get(i)[c]);
+			}
+		}
+		
+		
+}
+	
+	public static HashMap<String, Integer> wordC(List<String> doc) {
+		
+		HashMap<String, Integer> hm = new HashMap<String, Integer>();
+		for(int c =0; c<doc.size();c++)
+		{
+//			System.out.println(doc.get(c));
+			if(!hm.containsKey(doc.get(c))) {
+				hm.put(doc.get(c),1);
+			}
+			else {
+				
+				hm.put(doc.get(c), hm.get(doc.get(c)) + 1);
+			}
+		}
+		return(hm);
+	}
+	
+	public static void txtClean(StringBuffer stringBuffer) {
+		
+		for(int i=0; i< stringBuffer.length();i++)
+		{
+			if(stringBuffer.charAt(i)!=' ' &&
+					!((stringBuffer.charAt(i)>='A' && stringBuffer.charAt(i)<='Z')||
+							(stringBuffer.charAt(i)>='a' && stringBuffer.charAt(i)<='z')))
+			{
+				stringBuffer.deleteCharAt(i);
+				i--;
+			} 
+		}
+		}
+
+	public double tf(List<String> doc, String term) {
+
+		double result = 0;
+
+		for (String word : doc) {
+
+			if (term.equalsIgnoreCase(word))
+
+				result++;
+
+		}	
+		
+		return result / doc.size();
+	        		
+	}
+
+	public double idf(List<List<String>> docs, String term) {
+		double n = 0;
+
+		for (List<String> doc : docs) {
+
+			for (String word : doc) {
+				
+				if (term.equalsIgnoreCase(word)) {
+
+					n++;
+             
+					break;
+
+				}
+
+			}
+			
+		}
+
+		return Math.log(docs.size() / n);
+
+	}
+	
+	public double tfIdf(List<String> doc, List<List<String>> docs, String term) {
+		return tf(doc, term) * idf(docs, term);
+
+	}	
+}
+
+	
+
